@@ -31,7 +31,7 @@ public:
 		PlacePoints(UWorld* World);
 
 	FVector
-		GetRandomPointsInSide(FCornerCoordinates Coordinates);
+		GetRandomPointsInSide(const FVector UpperLeft, const FVector LowerRight);
 
 
 	int32

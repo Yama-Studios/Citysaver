@@ -27,7 +27,7 @@ void AProceduralRoom::BeginPlay()
 	theFloor->Partition();
 
 	theFloor->DrawFloorNodes(GetWorld());
-	//theFloor->PlacePoints(GetWorld());
+	theFloor->PlacePoints(GetWorld());
 
 	UE_LOG(LogTemp, Warning, TEXT("No.of Nodes : %d"), theFloor->GetPartitionedFloor().Num());
 }

@@ -9,7 +9,7 @@ Floor::Floor()
 	roomMinX = 3;
 	roomMinY = 5;
 	unitLength = 100;
-	splitChange = 1.5f;
+	splitChange = .5f;
 }
 
 Floor::~Floor()
@@ -192,17 +192,17 @@ void Floor::DrawFloorNode(UWorld* World, FCornerCoordinates Coordinates)
 	const FVector LowerLeft(Coordinates.upperLeftX * unitLength, Coordinates.lowerRightY * unitLength, 0);
 	const FVector LowerRight(Coordinates.lowerRightX * unitLength, Coordinates.lowerRightY * unitLength, 0);
 
-	DrawDebugLine(World, UpperLeft, UpperRight, FColor::Red, true, -1, 0, 100);
-	DrawDebugLine(World, UpperLeft, LowerLeft, FColor::Red, true, -1, 0, 100);
-	DrawDebugLine(World, LowerLeft, UpperRight, FColor::Red, true, -1, 0, 100);
-	DrawDebugLine(World, UpperRight, LowerRight, FColor::Red, true, -1, 0, 100);
+	DrawDebugLine(World, UpperLeft, UpperRight, FColor::Red, true, -1, 0, 1);
+	DrawDebugLine(World, UpperLeft, LowerLeft, FColor::Red, true, -1, 0, 1);
+	DrawDebugLine(World, LowerLeft, UpperRight, FColor::Red, true, -1, 0, 1);
+	DrawDebugLine(World, UpperRight, LowerRight, FColor::Red, true, -1, 0, 1);
 }
-/*
-FVector Floor::GetRandomPointsInSide(FCornerCoordinates Coordinates)
+
+FVector Floor::GetRandomPointsInSide(const FVector UpperLeft, const FVector LowerRight)
 {
 	
-	float randPointX = FMath::FRandRange(Coordinates.upperLeftX, Coordinates.lowerRightX);
-	float randPointY = FMath::FRandRange(Coordinates.upperLeftY, Coordinates.lowerRightY);
+	float randPointX = FMath::FRandRange(UpperLeft.X, LowerRight.X);
+	float randPointY = FMath::FRandRange(UpperLeft.Y, LowerRight.Y);
 	return FVector(randPointX, randPointY, 0);
 }
 
@@ -210,19 +210,24 @@ FVector Floor::GetRandomPointsInSide(FCornerCoordinates Coordinates)
 void Floor::PlacePoints(UWorld* World)
 {
 	FCornerCoordinates Coordinates;
+	Coordinates = FloorNode().GetCornerCoordinates();
 	for (int32 i = 0; i < floorGridSizeX; i++)
 	{
 		for (int32 j = 0; j < floorGridSizeY; j++)
 		{
 
-			const FVector UpperLeft(Coordinates.upperLeftX * unitLength, Coordinates.upperLeftY * unitLength, 0);
-			const FVector UpperRight(Coordinates.lowerRightX * unitLength, Coordinates.upperLeftY * unitLength, 0);
-			const FVector LowerLeft(Coordinates.upperLeftX * unitLength, Coordinates.lowerRightY * unitLength, 0);
-			const FVector LowerRight(Coordinates.lowerRightX * unitLength, Coordinates.lowerRightY * unitLength, 0);
-			FVector randPointinSquare = GetRandomPointsInSide(Coordinates);
-			DrawDebugPoint(World, randPointinSquare, 5, FColor::Green, true);
+			const FVector UpperLeft( Coordinates.upperLeftX  ,  Coordinates.upperLeftY  , 0);
+			const FVector UpperRight( Coordinates.lowerRightX  ,  Coordinates.upperLeftY  , 0);
+			const FVector LowerLeft(Coordinates.upperLeftX  ,  Coordinates.lowerRightY  , 0);
+			const FVector LowerRight(Coordinates.lowerRightX  ,  Coordinates.lowerRightY  , 0);
+
+			FVector newLeft = FVector(Coordinates.upperLeftX, Coordinates.upperLeftY, 0);
+			FVector newRight = FVector(Coordinates.lowerRightX, Coordinates.lowerRightY, 0);
+
+			FVector randPointinSquare = GetRandomPointsInSide(newLeft, newRight);
+			DrawDebugPoint(World, randPointinSquare, 5, FColor::Green, true, -1, 100);
 		}
 	}
-}*/
+}
 
 
